@@ -4,49 +4,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Daily Motivation</title>
-    <!-- Use Tailwind CSS for easy styling -->
-    <!-- Use the Inter font -->
+    <title>Daily Motivation - Your Source of Inspiration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .quote-container {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 4px solid #667eea;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .quote-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-text {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #1f2937;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .quote-author {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 16px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .favorites {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .favorites h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .favorite-quote {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #10b981;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .favorite-text {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+
+        .favorite-author {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .remove-favorite {
+            float: right;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .remove-favorite:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .quote-text {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-purple-200 to-pink-200 min-h-screen flex items-center justify-center p-4 text-gray-800 transition-colors duration-500 ease-in-out">
-
-    <!-- Main container for the app -->
-    <div id="app-container" class="relative bg-white rounded-3xl p-8 md:p-12 shadow-2xl max-w-lg w-full text-center transform transition-transform duration-500 hover:scale-105 z-10 overflow-hidden">
-        
-        <!-- SVG Flair - top-left star -->
-        <svg class="absolute top-4 left-4 w-12 h-12 text-yellow-400 opacity-70 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.25l-6.18 3.27L7 14.14l-5-4.87 8.91-1.01L12 2z"/>
-        </svg>
-
-        <!-- SVG Flair - bottom-right heart -->
-        <svg class="absolute bottom-4 right-4 w-10 h-10 text-red-400 opacity-70 animate-bounce" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-        </svg>
-
-        <!-- Main content area -->
-        <div class="space-y-6">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                Your Daily Dose of Inspiration
-            </h1>
-            <p id="quote-text" class="text-lg md:text-xl text-gray-700 italic">
-                "The journey of a thousand miles begins with a single step."
-            </p>
-
-            <button id="new-quote-btn" class="mt-8 px-6 py-3 bg-fuchsia-600 text-white font-bold rounded-full shadow-lg hover:bg-fuchsia-700 transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-fuchsia-300">
-                New Quote, Please!
-            </button>
-        </div>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
 
-    <!-- Link to the external JavaScript file -->
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Daily Motivation</h1>
+            <p class="subtitle">Your daily dose of inspiration and wisdom</p>
+        </div>
+
+        <div class="quote-container">
+            <div class="quote-icon">💬</div>
+            <p id="quote-text" class="quote-text">
+                "The journey of a thousand miles begins with a single step."
+            </p>
+            <p id="quote-author" class="quote-author">— Lao Tzu</p>
+        </div>
+
+        <div class="controls">
+            <button id="new-quote-btn" class="btn btn-primary">
+                ✨ New Quote
+            </button>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+        // Motivational quotes database
+        const quotes = [
+            { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+            { text: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" },
+            { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+            { text: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" },
+            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+            { text: "Success is walking from failure to failure with no loss of enthusiasm.", author: "Winston Churchill" },
+            { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+            { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+            { text: "The mind is everything. What you think you become.", author: "Buddha" },
+            { text: "The best way to predict the future is to invent it.", author: "Alan Kay" },
+            { text: "Everything you've ever wanted is on the other side of fear.", author: "George Addair" },
+            { text: "The only person you are destined to become is the person you decide to be.", author: "Ralph Waldo Emerson" },
+            { text: "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.", author: "Roy T. Bennett" },
+            { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" },
+            { text: "Dream big and dare to fail.", author: "Norman Vaughan" }
+        ];
+
+        // App state
+        let currentQuoteIndex = 0;
+        let quoteCount = 1;
+
+        // DOM elements
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const newQuoteBtn = document.getElementById('new-quote-btn');
+
+        // Initialize the app
+        function init() {
+            addEventListeners();
+        }
+
+        // Add event listeners
+        function addEventListeners() {
+            newQuoteBtn.addEventListener('click', showNewQuote);
+        }
+
+        // Show a new random quote
+        function showNewQuote() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * quotes.length);
+            } while (newIndex === currentQuoteIndex && quotes.length > 1);
+            
+            currentQuoteIndex = newIndex;
+            const quote = quotes[currentQuoteIndex];
+            
+            // Animate quote change
+            quoteText.style.opacity = '0';
+            quoteAuthor.style.opacity = '0';
+            
+            setTimeout(() => {
+                quoteText.textContent = quote.text;
+                quoteAuthor.textContent = `— ${quote.author}`;
+                quoteText.style.opacity = '1';
+                quoteAuthor.style.opacity = '1';
+                
+                // Add fade-in animation
+                quoteText.classList.add('fade-in');
+                quoteAuthor.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    quoteText.classList.remove('fade-in');
+                    quoteAuthor.classList.remove('fade-in');
+                }, 500);
+            }, 200);
+            
+            quoteCount++;
+        }
+
+
+
+
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
